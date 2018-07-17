@@ -22,22 +22,22 @@ try {
 
     }
 
-//1
-$keywords=$_GET['keywords'];
+// //1
+// $keywords=$_GET['keywords'];
 //2
-// echo '<br></br>' . htmlspecialchars($_GET["keywords"]);
+echo '<br></br>' . htmlspecialchars($_GET["keywords"]);
 
 $sth=$dbh->prepare($('SELECT First_Name, Last_Name, Year, Award_Type, Email_Address, Code, NRDS_ID
     FROM Awards
-    WHERE Awards < :Awards AND keywords = :keywords');
+    WHERE keywords = :keywords');
 
 
-$sth->bindParam(':keywords', $keywords, PDO::PARAM_STR, 20);
+$sth->bindParam(':keywords', htmlspecialchars($_GET["keywords"]), PDO::PARAM_STR, 20);
 
 print("Fetch all remaining rows in the result set:\n");
 $results= $sth->fetchAll();
 print_r($result);
-$howmany=count($results);
+// $howmany=count($results);
 
 $sth->execute();
 
@@ -47,15 +47,19 @@ if($sth)
     {
         foreach($results as $row)
         {
-             print $row[""] .$row[""] ."<br/>";
+             print $row[""]."<br/>";
          }
-          echo $row;
+          echo "<br></br>";
         }
         else
-            echo 'No Data Found'
+            echo 'No Data Found'; 
     }
 }
 
+catch (PDOException $e) {
+    print "Error!: " . $e->getMessage() . "<br/>";
+    die();
+}
  //3
 // foreach ($results as $row) {
 //     print $row[""] .$row[""] ."<br/>";
@@ -64,10 +68,6 @@ if($sth)
 
 
 
-catch (PDOException $e) {
-    print "Error!: " . $e->getMessage() . "<br/>";
-    die();
-}
 
 
 // if(isset($_GET['First_Name'])) {
