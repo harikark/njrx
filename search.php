@@ -1,16 +1,16 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+ini_set('display_errors', 10);
+ini_set('display_startup_errors', 10);
 error_reporting(E_ALL);
 
 $hostname = "mariadb-035.wc1.lan3.stabletransit.com";
-$dbh = "705705_njr_hk";
-$user = "705705_njr_hk";
-$pass = "R+}sxth4]QX]sL5e<&(n";
+$db = "705705_njr_hk";
+$username = "705705_njr_hk";
+$password = "R+}sxth4]QX]sL5e<&(n";
 
 
 try {
- $conn = new PDO('mysql:host=mariadb-035.wc1.lan3.stabletransit.com;dbname=$705705_njr_hk', $user, $pass);
+ $conn = new PDO('mysql:host=mariadb-035.wc1.lan3.stabletransit.com;dbname=705705_njr_hk', '705705_njr_hk', 'R+}sxth4]QX]sL5e<&(n');
 
     if($conn){
         echo"<h1>Connection Successful</h1>";
@@ -22,64 +22,46 @@ try {
 
     }
 
-// //1
-// $keywords=$_GET['keywords'];
-//2
-echo '<br></br>' . htmlspecialchars($_GET["keywords"]);
+//1
+$keywords=$_GET['keywords'];
+// //2
+// echo '<br></br>' . htmlspecialchars($_GET["keywords"]);
 
-$sth=$dbh->prepare($('SELECT First_Name, Last_Name, Year, Award_Type, Email_Address, Code, NRDS_ID
-    FROM Awards
-    WHERE keywords = :keywords');
+$sth=$conn->prepare('SELECT * FROM Awards WHERE First_Name LIKE :keywords OR Last_Name LIKE :keywords OR Year LIKE :keywords OR Award_Type LIKE :keywords OR Email_Address LIKE :keywords OR Code LIKE :keywords OR NRDS_ID LIKE :keywords');
 
-
-$sth->bindParam(':keywords', htmlspecialchars($_GET["keywords"]), PDO::PARAM_STR, 20);
-
+//1
+$sth->bindParam(':keywords',$keywords, PDO::PARAM_STR, 20);
+$sth->execute();
 print("Fetch all remaining rows in the result set:\n");
 $results= $sth->fetchAll();
-print_r($result);
-// $howmany=count($results);
+print_r($results);
+$howmany=count($results);
 
-$sth->execute();
+$return=array(); 
 
-if($sth)
-{
-    if(results->rowCount()>0)
-    {
-        foreach($results as $row)
-        {
-             print $row[""]."<br/>";
-         }
-          echo "<br></br>";
-        }
-        else
-            echo 'No Data Found'; 
-    }
+
+
+if($howmany>0){
+      foreach ($row = $results) {
+            $return[]=aarray('First_Name,')
+            $results[] = $row;
+    
+      }
+  }
+
+    header("Access-Control-Allow-Origin: *");//this allows coors
+    header('Content-Type: application/json');
+    print json_encode($results);
 }
 
-catch (PDOException $e) {
+
+
+
+}catch (PDOException $e) {
     print "Error!: " . $e->getMessage() . "<br/>";
     die();
 }
- //3
-// foreach ($results as $row) {
-//     print $row[""] .$row[""] ."<br/>";
-// }
-// echo '<table><tr><td>'.$row[""].'</td></tr></table>';
-
-
-
-
-
-// if(isset($_GET['First_Name'])) {
-//   $Fname=$_GET['First_Name'];
-// }
-
-// else {
-//   echo "Data was not set in the form\n";
-
-// }
-
-
+ 
 
 
 ?>

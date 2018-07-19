@@ -5,7 +5,7 @@
 $(document).ready(function(){
 
     var typingTimer;
-    var doneTypingInterval = 2000;
+    var doneTypingInterval = 1000;
     $("#myinput").on("keyup", function(){
         console.log("Here 01");
         clearTimeout(typingTimer);
@@ -15,10 +15,17 @@ $(document).ready(function(){
     });
     function doneTyping () {
         $.get("search.php", {keywords: $("#myinput").val()}, function(data){
-            $("#location tbody").html(data);
-            alert ("Load performed");
+            $("#location tbody").html(data);  //Table
+            console.log ("Load performed");
+        var parsedJSON = $.parseJSON(results);
         });
     }});
+
+
+
+
+
+
 
 // var textInput = document.getElementById('myinput');
 //     var timeout = null;
